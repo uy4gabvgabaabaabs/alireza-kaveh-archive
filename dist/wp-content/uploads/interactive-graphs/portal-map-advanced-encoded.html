@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>نقشهٔ تعاملی درگاه — نسخهٔ رمزنگار</title>
+  <script src="https://unpkg.com/cytoscape@3.21.1/dist/cytoscape.min.js"></script>
+  <style> :root{   --primary:#2563eb;    /* رنگ شاخه‌های اصلی (و مرکز) */   --secondary:#60a5fa;  /* رنگ زیرشاخه‌ها */   --edge:#9ca3af;   --bg:#f3f4f6;   --card-bg:#ffffff;   --card-border:#e5e7eb;   --text:#111827; } html, body { margin:0; padding:0; height:100%; background:var(--bg); font-family:system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans Arabic", "Vazirmatn", sans-serif; } #cy{ width:100%; height:100vh; } .hud{   position:fixed; inset-inline-start:12px; inset-block-end:12px;   background: #ffffffcc; backdrop-filter: blur(8px);   border:1px solid var(--card-border); border-radius:12px; padding:10px 14px; font-size:12px; line-height:1.7; color:var(--text);   max-width:min(90vw,520px); box-shadow:0 8px 24px rgba(0,0,0,.08); } .hud .title{ font-weight:700; font-size:13px; margin-bottom:6px; } .btn{   display:inline-flex; align-items:center; gap:.5rem; border:1px solid var(--card-border); padding:.4rem .7rem; border-radius:999px; cursor:pointer; user-select:none;   background:var(--card-bg) } .panel{   position:fixed; inset-inline-end:12px; inset-block-start:12px; background: #ffffffe6; border:1px solid var(--card-border); border-radius:12px; padding:12px 14px; box-shadow:0 8px 24px rgba(0,0,0,.08); max-width: 420px; display:none; } .panel.open{ display:block; } .panel h2{ margin:0 0 8px 0; font-size:14px; } .tooltip{   position:fixed; pointer-events:none; transform:translate(-50%, -120%);   background:var(--card-bg); border:1px solid var(--card-border); border-radius:10px; padding:8px 10px; font-size:12px; color:var(--text);   display:none; box-shadow:0 8px 24px rgba(0,0,0,.08); max-width:280px; } .tooltip img{ width:48px; height:48px; object-fit:cover; border-radius:8px; margin-inline-end:8px; border:1px solid var(--card-border); background:#fafafa; } .tooltip .row{ display:flex; align-items:center; } .legend{   position:fixed; inset-inline-start:12px; inset-block-start:12px; background: #ffffffe6; border:1px solid var(--card-border); border-radius:12px; padding:10px 12px; font-size:12px; color:var(--text); box-shadow:0 8px 24px rgba(0,0,0,.08);   display:flex; align-items:center; gap:10px; } .chip{ display:inline-flex; align-items:center; gap:6px; } .dot{ width:12px; height:12px; border-radius:999px; background:var(--primary); border:1px solid #1e3a8a22; } .dot.secondary{ background:var(--secondary); } </style>
+</head>
+<body>
+  <div id="cy"></div>
+
+  <!-- پنل راهنما -->
+  <div id="guide" class="panel" role="dialog" aria-label="راهنما">
+    <h2>راهنمای استفاده</h2>
+    <ol style="margin:0; padding-inline-start:18px;">
+      <li>روی هر <b>شاخهٔ اصلی</b> کلیک کنید تا <b>زیرشاخه‌ها</b> باز/بسته شوند.</li>
+      <li>روی هر گره که <b>پیوند</b> دارد کلیک کنید تا صفحهٔ مربوط باز شود.</li>
+      <li>روی زمینه دوبار کلیک کنید تا چیدمان تازه‌سازی شود.</li>
+      <li>دو رنگ بیشتر نداریم: رنگ شاخه‌های اصلی و رنگ زیرشاخه‌ها.</li>
+    </ol>
+  </div>
+
+  <!-- HUD کوتاه -->
+  <div class="hud">
+    <div class="title">نقشهٔ تعاملی درگاه</div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <span class="btn" id="toggleGuide">راهنما</span>
+      <span class="btn" id="resetLayout">بازچینی</span>
+    </div>
+  </div>
+
+  <!-- کُرُنمای/افسانک -->
+  <div class="legend">
+    <span class="chip"><span class="dot"></span> شاخهٔ اصلی</span>
+    <span class="chip"><span class="dot secondary"></span> زیرشاخه</span>
+  </div>
+
+  <div id="tip" class="tooltip" dir="rtl"></div>
+
+  <!-- **فقط این بلوک JSON را ویرایش کنید** -->
+  <script type="application/json" id="graph-data">
+  {
+    "center": {"label":"علیرضا کاوه","image":"https://alirezakaveh.com/wp-content/uploads/2025/08/11.jpg","url":"https://alirezakaveh.com/"},
+    "categories":[
+      {"label":"کتاب","url":"","children":[
+        {"label":"منتشرشده","url":"","children":[
+          {"label":"گونه سینمایی: لحن و نظام ارزشی","url":"https://alirezakaveh.com/film-genre-book/",
+ "image":"https://alirezakaveh.com/wp-content/uploads/2025/05/Cover7-scaled.jpg"},
+          {"label":"تقسیم‌بندی سینمایی","url":"https://alirezakaveh.com/cinematic-taxonomy/",
+ "image":"https://alirezakaveh.com/wp-content/uploads/2025/05/تقسیم_بندی-سینمایی1-نهایی-scaled.jpg"},
+          {"label":"چنین سیاه آینه‌ای ","url":"https://alirezakaveh.com/elementor-1335/",
+ "image":"https://alirezakaveh.com/wp-content/uploads/2025/07/Cover1-scaled.jpeg"},
+          {"label":"هفت گونه سینما","url":"https://alirezakaveh.com/هفت-گونه-سینما-1437",
+ "image":"https://alirezakaveh.com/wp-content/uploads/2025/05/icon-512x512-1.png"},
+          {"label":"بیننده فیلم","url":"https://alirezakaveh.com/film-spectator-715",
+ "image":"https://alirezakaveh.com/wp-content/uploads/2025/06/نهایی.jpg"}
+        ]},
+        {"label":"همکاری","url":"https://alirezakaveh.com/%D9%81%D9%87%D8%B1%D8%B3%D8%AA-%D8%A2%D8%AB%D8%A7%D8%B1-729","children":[]},
+        {"label":"در حال نگارش","url":"","children":[
+          {"label":"گونهٔ موزیکال","url":"https://alirezakaveh.com/گونهی-موزیکال", "image":""},
+          {"label":"سینما و هوش مصنوعی","url":"", "image":""},
+         {"label":"ناتاریخ سینما","url":"", "image":""},
+          {"label":"جلد چهارم: هفت گونه","url":"",
+ "image":"https://alirezakaveh.com/wp-content/uploads/2025/05/icon-512x512-1.png"}
+        ]}
+      ]},
+      {"label":"فیلم","url":"","children":[
+        {"label":"سه خواهر (فیلم‌نامه)","url":""},
+        {"label":"سه خواهر (فیلم در حال تولید)","url":"https://alirezakaveh.com/category/%d9%81%db%8c%d9%84%d9%85-%d9%87%d8%a7"}
+      ]},
+      {"label":"مقاله","url":"","children":[
+        {"label":"بازاندیشی ژانر","url":"https://alirezakaveh.com/%d8%a8%d8%a7%d8%b2%d8%a7%d9%86%d8%af%db%8c%d8%b4%db%8c-%da%98%d8%a7%d9%86%d8%b1-rethinking-genre"},
+        {"label":"فهرست مقالات","url":"https://alirezakaveh.com/%d9%81%d9%87%d8%b1%d8%b3%d8%aa-%d9%85%d9%82%d8%a7%d9%84%d8%a7%d8%aa-1408"}
+      ]},
+      {"label":"پیوندها","url":"","children":[
+        {"label":"شبکه اجتماعی","url":"https://alirezakaveh.com/links/"},
+       {"label":"IMDb","url":"https://www.imdb.com/name/nm10064190/"},
+        {"label":"ORCID","url":"https://orcid.org/0009-0008-9211-4422"},
+        {"label":"Google Scholar","url":"https://scholar.google.com/citations?user=SNHblb0AAAAJ"}
+      ]},
+      {"label":"نظریه","url":"","children":[
+        {"label":"نظریهٔ بینندگی (Viewership)","url":"https://alirezakaveh.com/%d9%86%d8%b8%d8%b1%db%8c%d9%87%d9%87%d8%a7"},
+        {"label":"رنگین‌کمان ژانر","url":"https://alirezakaveh.com/%d9%86%d8%b8%d8%b1%db%8c%d9%87%d9%87%d8%a7"},
+        {"label":"ابرروایت در ناتاریخ","url":"https://alirezakaveh.com/%d9%86%d8%b8%d8%b1%db%8c%d9%87%d9%87%d8%a7"}
+      ]},
+      {"label":"پژوهش","url":"","children":[
+        {"label":"تاریخ بینندگی","url":"https://alirezakaveh.com/%d9%be%da%98%d9%88%d9%87%d8%b4"},
+        {"label":"Notahistory of Cinema","url":""}
+      ]},
+      {"label":"AI","url":"","children":[
+        {"label":"Public GPT","url":"https://chatgpt.com/g/g-683732861be481919a46884d1c3143d3-alireza-kaveh-public-gpt-on-film-cinema?model=gpt-4o"},
+        {"label":"Pro GPT","url":"https://chatgpt.com/g/g-6834b5bba1648191ad7252f217768021-alireza-kaveh-film-iranian-cinema-advisor?model=gpt-4o"}
+      ]},
+      {"label":"انگلیسی English","url":"","children":[
+        {"label":"About","url":"https://alirezakaveh.com/about-alireza-kaveh"},
+        {"label":"(EN)","url":"https://alirezakaveh.com/alireza-kaveh-genre-theory"}
+      ]},
+      {"label":"رسانه","url":"","children":[
+        {"label":"YouTube","url":""},
+        {"label":"Substack / Medium","url":""}
+      ]},
+      {"label":"بازخورد","url":"https://alirezakaveh.com/%d9%86%d9%82%d8%af%db%8c-%d8%a8%d8%b1-%d8%af%d9%88-%da%a9%d8%aa%d8%a7%d8%a8","children":[]},
+      {"label":"راهنما","url":"","children":[
+        {"label":"جستجو","url":"https://alirezakaveh.com/guide-826"}
+      ]}
+    ]
+  }
+  </script>
+
+  <!-- بستهٔ رمزنگاری‌شده (Base64) -->
+  <script type="application/json" id="bundle-b64">Ci8vINiu2YjYp9mG2K/ZhiDYr9in2K/Zh+KAjNmH2KcKY29uc3QgZGF0YUVsID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2dyYXBoLWRhdGEnKTsKY29uc3QgREFUQSA9IEpTT04ucGFyc2UoZGF0YUVsLnRleHRDb250ZW50KTsKCi8vINiz2KfYrtiqIEN5dG9zY2FwZQpjb25zdCBjeSA9IGN5dG9zY2FwZSh7CiAgY29udGFpbmVyOiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY3knKSwKICBlbGVtZW50czogW10sCiAgc3R5bGU6IFsKICAgIHsgc2VsZWN0b3I6ICdub2RlJywKICAgICAgc3R5bGU6IHsKICAgICAgICAnbGFiZWwnOidkYXRhKGxhYmVsKScsCiAgICAgICAgJ3RleHQtdmFsaWduJzonY2VudGVyJywKICAgICAgICAndGV4dC1oYWxpZ24nOidjZW50ZXInLAogICAgICAgICdiYWNrZ3JvdW5kLWNvbG9yJzogJ2RhdGEoY29sb3IpJywKICAgICAgICAnY29sb3InOicjZmZmJywKICAgICAgICAndGV4dC1vdXRsaW5lLXdpZHRoJzoyLAogICAgICAgICd0ZXh0LW91dGxpbmUtY29sb3InOidkYXRhKGNvbG9yKScsCiAgICAgICAgJ2ZvbnQtc2l6ZSc6JzEycHgnLAogICAgICAgICd3aWR0aCc6J2xhYmVsJywgJ2hlaWdodCc6J2xhYmVsJywgJ3BhZGRpbmcnOic2cHggOHB4JywKICAgICAgICAnc2hhcGUnOidyb3VuZHJlY3RhbmdsZScsCiAgICAgICAgJ2JvcmRlci13aWR0aCc6J21hcERhdGEoaXNDZW50ZXIsIDAsIDEsIDAsIDMpJywKICAgICAgICAnYm9yZGVyLWNvbG9yJzonIzFlNDBhZicKICAgICAgfQogICAgfSwKICAgIHsgc2VsZWN0b3I6ICdlZGdlJywKICAgICAgc3R5bGU6IHsgJ3dpZHRoJzoyLCAnbGluZS1jb2xvcic6J3ZhcigtLWVkZ2UpJywgJ3RhcmdldC1hcnJvdy1jb2xvcic6J3ZhcigtLWVkZ2UpJywgJ3RhcmdldC1hcnJvdy1zaGFwZSc6J3RyaWFuZ2xlJyB9CiAgICB9CiAgXSwKICBsYXlvdXQ6eyBuYW1lOidjb25jZW50cmljJywgcGFkZGluZzogNTAsIGFuaW1hdGU6dHJ1ZSwgYW5pbWF0aW9uRHVyYXRpb246NTAwIH0KfSk7CgovLyDYr9mIINix2Ybarwpjb25zdCBDT0xPUl9NQUlOID0gZ2V0Q29tcHV0ZWRTdHlsZShkb2N1bWVudC5kb2N1bWVudEVsZW1lbnQpLmdldFByb3BlcnR5VmFsdWUoJy0tcHJpbWFyeScpLnRyaW0oKTsKY29uc3QgQ09MT1JfQ0hJTEQgPSBnZXRDb21wdXRlZFN0eWxlKGRvY3VtZW50LmRvY3VtZW50RWxlbWVudCkuZ2V0UHJvcGVydHlWYWx1ZSgnLS1zZWNvbmRhcnknKS50cmltKCk7CgovLyDYp9mB2LLZiNiv2YYg2q/YsdmHINmF2LHaqdiyINmIINiv2LPYqtmH4oCM2YfYpwpjb25zdCBjZW50ZXJJZCA9ICdjZW50ZXInOwpjeS5hZGQoeyBncm91cDonbm9kZXMnLCBkYXRhOnsgaWQ6Y2VudGVySWQsIGxhYmVsOkRBVEEuY2VudGVyLmxhYmVsLCBjb2xvcjpDT0xPUl9NQUlOLCBpc0NlbnRlcjoxLCB1cmw6REFUQS5jZW50ZXIudXJsLCBpbWFnZTpEQVRBLmNlbnRlci5pbWFnZSB9fSk7CgovLyDYrdmE2YLZh+KAjNuMINiz2KfYrtiqINi02KfYrtmH4oCM2YfYp9uMINin2LXZhNuMCkRBVEEuY2F0ZWdvcmllcy5mb3JFYWNoKChjYXQsIGlkeCk9PnsKICBjb25zdCBpZCA9ICdjYXRfJytpZHg7CiAgY3kuYWRkKFsKICAgIHsgZ3JvdXA6J25vZGVzJywgZGF0YTp7IGlkLCBsYWJlbDpjYXQubGFiZWwsIGNvbG9yOkNPTE9SX01BSU4sIGlzQ2VudGVyOjAsIHVybDpjYXQudXJsLCB0eXBlOidjYXRlZ29yeScsIGV4cGFuZGVkOmZhbHNlLCBpZHggfX0sCiAgICB7IGdyb3VwOidlZGdlcycsIGRhdGE6eyBpZDonZV8nK2NlbnRlcklkKydfJytpZCwgc291cmNlOmNlbnRlcklkLCB0YXJnZXQ6aWQgfX0KICBdKTsKfSk7CgovLyDYqtmI2KfYqNi5INqp2YXaqeKAjNqp2YbZhtiv2Ycg2KjYsdin24wg2LPYp9iu2Kog2Ygg2K3YsNmBINiy24zYsdi02KfYrtmH4oCM2YfYpwpmdW5jdGlvbiBtYWtlQ2hpbGRJZChjYXRJZHgsIHBhdGhJZHhBcnJheSl7CiAgcmV0dXJuICdjXycrY2F0SWR4KydfJytwYXRoSWR4QXJyYXkuam9pbignXycpOwp9CgpmdW5jdGlvbiB0b2dnbGVDYXRlZ29yeShjYXROb2RlKXsKICBjb25zdCBleHBhbmRlZCA9ICEhY2F0Tm9kZS5kYXRhKCdleHBhbmRlZCcpOwogIGNvbnN0IGNhdElkeCA9IGNhdE5vZGUuZGF0YSgnaWR4Jyk7CiAgY29uc3Qgc3BlYyA9IERBVEEuY2F0ZWdvcmllc1tjYXRJZHhdOwoKICBpZighZXhwYW5kZWQpewogICAgYWRkQ2hpbGRyZW5SZWN1cnNpdmVseShjYXROb2RlLmlkKCksIHNwZWMuY2hpbGRyZW4gfHwgW10sIFtjYXRJZHhdLCAxKTsKICAgIGNhdE5vZGUuZGF0YSgnZXhwYW5kZWQnLCB0cnVlKTsKICB9ZWxzZXsKICAgIGNvbnN0IGRlc2NlbmRhbnRzID0gY3kuY29sbGVjdGlvbigpOwogICAgY3kuZWxlbWVudHMoKS5mb3JFYWNoKGVsPT57CiAgICAgIGlmKGVsLmlzTm9kZSgpICYmIGVsLmRhdGEoJ2JlbG9uZ3NUbycpPT09Y2F0Tm9kZS5pZCgpKXsgZGVzY2VuZGFudHMubWVyZ2UoZWwpOyB9CiAgICAgIGlmKGVsLmlzRWRnZSgpICYmIGVsLmRhdGEoJ2JlbG9uZ3NUbycpPT09Y2F0Tm9kZS5pZCgpKXsgZGVzY2VuZGFudHMubWVyZ2UoZWwpOyB9CiAgICB9KTsKICAgIGN5LnJlbW92ZShkZXNjZW5kYW50cyk7CiAgICBjYXROb2RlLmRhdGEoJ2V4cGFuZGVkJywgZmFsc2UpOwogIH0KfQoKZnVuY3Rpb24gYWRkQ2hpbGRyZW5SZWN1cnNpdmVseShwYXJlbnRJZCwgaXRlbXMsIHBhdGgsIGRlcHRoKXsKICBjb25zdCBjYXRJZCA9ICdjYXRfJytwYXRoWzBdOwogIGNvbnN0IHJhZGl1cyA9IDgwICsgZGVwdGgqNDA7CiAgY29uc3QgcGFyZW50UG9zID0gY3kuZ2V0RWxlbWVudEJ5SWQocGFyZW50SWQpLnBvc2l0aW9uKCk7CiAgY29uc3QgY291bnQgPSBpdGVtcy5sZW5ndGg7CiAgaXRlbXMuZm9yRWFjaCgoaXRlbSwgaSk9PnsKICAgIGNvbnN0IGNoaWxkSWQgPSBtYWtlQ2hpbGRJZChwYXRoWzBdLCBwYXRoLnNsaWNlKDEpLmNvbmNhdChpKSk7CiAgICBjb25zdCBub2RlID0gY3kuYWRkKHsKICAgICAgZ3JvdXA6J25vZGVzJywKICAgICAgZGF0YTp7CiAgICAgICAgaWQ6IGNoaWxkSWQsCiAgICAgICAgbGFiZWw6IGl0ZW0ubGFiZWwsCiAgICAgICAgY29sb3I6IENPTE9SX0NISUxELAogICAgICAgIHVybDogaXRlbS51cmwgfHwgJycsCiAgICAgICAgaW1hZ2U6IGl0ZW0uaW1hZ2UgfHwgJycsCiAgICAgICAgYmVsb25nc1RvOiBjYXRJZAogICAgICB9LAogICAgICBwb3NpdGlvbjp7CiAgICAgICAgeDogcGFyZW50UG9zLnggKyByYWRpdXMgKiBNYXRoLmNvcygoMipNYXRoLlBJKmkpL01hdGgubWF4KGNvdW50LDEpKSwKICAgICAgICB5OiBwYXJlbnRQb3MueSArIHJhZGl1cyAqIE1hdGguc2luKCgyKk1hdGguUEkqaSkvTWF0aC5tYXgoY291bnQsMSkpCiAgICAgIH0KICAgIH0pOwogICAgY3kuYWRkKHsgZ3JvdXA6J2VkZ2VzJywgZGF0YTp7IGlkOidlXycrcGFyZW50SWQrJ18nK2NoaWxkSWQsIHNvdXJjZTpwYXJlbnRJZCwgdGFyZ2V0OmNoaWxkSWQsIGJlbG9uZ3NUbzpjYXRJZCB9fSk7CiAgICBpZihBcnJheS5pc0FycmF5KGl0ZW0uY2hpbGRyZW4pICYmIGl0ZW0uY2hpbGRyZW4ubGVuZ3RoKXsKICAgICAgYWRkQ2hpbGRyZW5SZWN1cnNpdmVseShjaGlsZElkLCBpdGVtLmNoaWxkcmVuLCBwYXRoLmNvbmNhdChpKSwgZGVwdGgrMSk7CiAgICB9CiAgfSk7Cn0KCi8vINiq2LnYp9mF2YTYp9iqCmN5Lm9uKCd0YXAnLCAnbm9kZScsIChldnQpPT57CiAgY29uc3QgbiA9IGV2dC50YXJnZXQ7CiAgaWYobi5kYXRhKCd0eXBlJyk9PT0nY2F0ZWdvcnknKXsKICAgIHRvZ2dsZUNhdGVnb3J5KG4pOwogICAgcmV0dXJuOwogIH0KICBjb25zdCB1cmwgPSBuLmRhdGEoJ3VybCcpOwogIGlmKHVybCl7IHdpbmRvdy5vcGVuKHVybCwgJ19ibGFuaycpOyB9Cn0pOwoKLy8g2KjYp9iy2obbjNmG24wg2LPYp9iv2YcKZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jlc2V0TGF5b3V0JykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCAoKT0+ewogIGN5LmxheW91dCh7IG5hbWU6J2NvbmNlbnRyaWMnLCBwYWRkaW5nOjUwLCBhbmltYXRlOnRydWUsIGFuaW1hdGlvbkR1cmF0aW9uOjUwMCB9KS5ydW4oKTsKfSk7CmN5Lm9uKCdkYmx0YXAnLCAoKT0+ewogIGN5LmxheW91dCh7IG5hbWU6J2NvbmNlbnRyaWMnLCBwYWRkaW5nOjUwLCBhbmltYXRlOnRydWUsIGFuaW1hdGlvbkR1cmF0aW9uOjUwMCB9KS5ydW4oKTsKfSk7CgovLyDYsdin2YfZhtmF2KcKY29uc3QgZ3VpZGVCdG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndG9nZ2xlR3VpZGUnKTsKY29uc3QgZ3VpZGVQYW5lbCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdndWlkZScpOwpndWlkZUJ0bi5hZGRFdmVudExpc3RlbmVyKCdjbGljaycsICgpPT4gZ3VpZGVQYW5lbC5jbGFzc0xpc3QudG9nZ2xlKCdvcGVuJykpOwoKLy8gVG9vbHRpcCDYs9in2K/Zhwpjb25zdCB0aXAgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndGlwJyk7CmN5Lm9uKCdtb3VzZW92ZXInLCAnbm9kZScsIChldnQpPT57CiAgY29uc3QgbiA9IGV2dC50YXJnZXQ7CiAgY29uc3QgcG9zID0gbi5yZW5kZXJlZFBvc2l0aW9uKCk7CiAgY29uc3QgcmVjdCA9IGN5LmNvbnRhaW5lcigpLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpOwogIGNvbnN0IGltZyA9IChuLmRhdGEoJ2ltYWdlJykgfHwgJycpLnRyaW0oKTsKICB0aXAuaW5uZXJIVE1MID0gaW1nCiAgICA/IGA8ZGl2IGNsYXNzPSJyb3ciPjxpbWcgc3JjPSIke2ltZ30iIGFsdD0iIj48ZGl2PiR7bi5kYXRhKCdsYWJlbCcpfTwvZGl2PjwvZGl2PmAKICAgIDogYDxkaXY+JHtuLmRhdGEoJ2xhYmVsJyl9PC9kaXY+YDsKICB0aXAuc3R5bGUubGVmdCA9IChyZWN0LmxlZnQgKyBwb3MueCkgKyAncHgnOwogIHRpcC5zdHlsZS50b3AgID0gKHJlY3QudG9wICsgcG9zLnkpICsgJ3B4JzsKICB0aXAuc3R5bGUuZGlzcGxheSA9ICdibG9jayc7Cn0pOwpjeS5vbignbW91c2VvdXQnLCAnbm9kZScsICgpPT57IHRpcC5zdHlsZS5kaXNwbGF5ID0gJ25vbmUnOyB9KTsKCi8vINmH2YXigIzYqtix2KfYstiz2KfYstuMINin2YjZhNuM2YcKY3kubGF5b3V0KHsgbmFtZTonY29uY2VudHJpYycsIHBhZGRpbmc6NTAsIGFuaW1hdGU6dHJ1ZSwgYW5pbWF0aW9uRHVyYXRpb246NjAwIH0pLnJ1bigpOwo=</script>
+
+  <!-- لودر کوچک -->
+  <script>(function(){try{var b=document.getElementById('bundle-b64');if(!b)return;var code=atob((b.textContent||'').trim());new Function(code)();}catch(e){console.error('Loader error:',e);}})();</script>
+</body>
+</html>
