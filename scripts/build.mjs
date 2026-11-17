@@ -67,7 +67,11 @@ fs.mkdirSync(path.join(out, 'assets'), {recursive:true});
 const media = new Set();
 for (const p of posts) {
   p.content = strip(p.content).replace(/https?:\/\/alirezakaveh\.com\/wp-content\/uploads\/([^"'?#\s<]+)/gi, (_, rel) => {
-    const clean = decodeURIComponent(rel).replace(/\\/g,'/'); media.add(clean); return `${base}/wp-content/uploads/${clean}`;
+    const clean = decodeURIComponent(rel).replace(/\\/g,'/');
+    // Keep large videos on the original WordPress host instead of duplicating
+    // them in GitHub Pages; this saves roughly 129 MB in the published archive.
+    if (/\.mp4$/i.test(clean)) return `https://alirezakaveh.com/wp-content/uploads/${rel}`;
+    media.add(clean); return `${base}/wp-content/uploads/${clean}`;
   }).replace(/href="https?:\/\/alirezakaveh\.com\/?"/gi, `href="${base}/"`);
   const section = p.type === 'post' ? 'articles' : 'pages';
   // Numeric paths are stable and avoid Windows/Git path-length failures caused by
